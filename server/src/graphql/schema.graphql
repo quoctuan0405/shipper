@@ -1,0 +1,50 @@
+type User {
+    id: ID!
+    type: Type!
+    name: String!
+    phone: String
+}
+
+type Group {
+    id: ID!
+    users: [User!]!
+}
+
+type Message {
+    id: ID!
+    content: String!
+    author: User!
+    group: Group!
+}
+
+enum Type {
+    CUSTOMER
+    SHIPPER
+}
+
+type Query {
+    messages(getMessagesInput: GetMessagesInput): [Message]!
+    user(id: ID!): User
+    group(id: ID!): Group
+}
+
+type Mutation {
+    createGroup(users: [ID!]!): Group
+    addUsersToGroup(id: ID!, users: [ID!]!): Group
+    addMessage(addMessageInput: AddMessageInput): Message
+}
+
+type Subscription {
+    message(groupId: ID!): Message
+}
+
+input GetMessagesInput {
+    groupId: ID!
+    cursor: ID
+}
+
+input AddMessageInput {
+    authorId: ID!
+    groupId: ID! 
+    content: String!
+}
